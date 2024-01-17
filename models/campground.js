@@ -1,5 +1,6 @@
 const con = require('../database/db');
 
+
 con.connect(function () {
     let sql = "CREATE TABLE IF NOT EXISTS camp (id INT PRIMARY KEY AUTO_INCREMENT,title VARCHAR(50), price FLOAT, description VARCHAR(255), location VARCHAR(255))";
     con.query(sql, function (err, result) {
@@ -8,6 +9,7 @@ con.connect(function () {
         } else {
             console.log("Table created");
         }
-        con.end();
     })
 });
+
+
