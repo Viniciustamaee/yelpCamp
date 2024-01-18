@@ -13,9 +13,10 @@ con.connect(function (err) {
         const price = random1000;
         const description = 'bonito';
         const location = cities[random1000].state;
+        const imgs = 'https://images.unsplash.com/photo-1518602164578-cd0074062767?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D'
 
-        var sql = 'INSERT INTO camp (title, price, description, location) VALUES (?, ?, ?, ?)';
-        con.query(sql, [title, price, description, location], function (err, result) {
+        var sql = 'INSERT INTO camp (title, price, description, location, imgs) VALUES (?, ?, ?, ?, ?)';
+        con.query(sql, [title, price, description, location, imgs], function (err, result) {
             if (err) throw err;
             console.log("1 registro inserido");
         });
