@@ -4,21 +4,24 @@
             Edit the campground
         </h1>
         <div class="col-6 offset-3">
-            <form action="/campgrounds/<%= results[0].id %>?_method=PUT " method="POST">
+            <form action="/campgrounds/<%= results[0].id %>?_method=PUT " method="POST" novalidate
+                class="validated-form">
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
-                    <input type="text" id="title" name="title" class="form-control" value="<%= results[0].title %>">
+                    <input type="text" id="title" name="title" class="form-control" value="<%= results[0].title %>"
+                        required>
                 </div>
 
                 <div class="mb-3">
                     <label for="location" class="form-label">Location</label>
                     <input type="text" id="location" name="location" class="form-control "
-                        value="<%=results[0].location %>">
+                        value="<%=results[0].location %>" required>
                 </div>
 
                 <div class="mb-3">
                     <label for="imgs" class="form-label">Img url</label>
-                    <input type="text" id="imgs" name="imgs" class="form-control " value=" <%=results[0].imgs %>">
+                    <input type="text" id="imgs" name="imgs" class="form-control " value="<%=results[0].imgs %>"
+                        required>
                 </div>
 
 
@@ -26,13 +29,13 @@
                 <div class="input-group mb-3">
                     <span class="input-group-text">$</span>
                     <input type="number" id="price" class="form-control" placeholder="0.0" name="price"
-                        value="<%= results[0].price %>">
+                        value="<%= results[0].price %>" required>
                 </div>
 
                 <div class="mb-3">
                     <label for="description" class="form-label">Description</label>
-                    <textarea type="text" id="description" name="description"
-                        class="form-control"><%= results[0].description  %></textarea>
+                    <textarea type="text" id="description" name="description" class="form-control"
+                        required><%= results[0].description  %></textarea>
                 </div>
 
                 <div class="mb-3">
