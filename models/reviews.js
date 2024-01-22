@@ -1,8 +1,7 @@
 const con = require('../database/db');
 
-
 con.connect(function () {
-    let sql = "CREATE TABLE IF NOT EXISTS teste (id INT PRIMARY KEY AUTO_INCREMENT,title VARCHAR(50), price FLOAT, description VARCHAR(255), location VARCHAR(255))";
+    let sql = "CREATE TABLE IF NOT EXISTS reviews (id INT PRIMARY KEY AUTO_INCREMENT,comment VARCHAR(255), rating int(5), id_camp INT,FOREIGN KEY(id_camp) REFERENCES camp(id))";
     con.query(sql, function (err, result) {
         if (err) {
             console.error('Error creating table:', err);
@@ -11,5 +10,3 @@ con.connect(function () {
         }
     })
 });
-
-
