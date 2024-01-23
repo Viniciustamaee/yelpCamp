@@ -44,6 +44,9 @@
                 </div>
                 <button class="btn btn-success mb-3" type="submit">Send</button>
             </form>
+
+
+
             <% for(let rev of resultsReviews) {%>
                 <div class="card mb-3">
                     <div class="card-body">
@@ -55,7 +58,7 @@
                             <b>Comment:</b>
                             <%= rev.comment %>
                         </p>
-                        <form action="/campgounds/<%= results[0].id %>/reviews/<%= rev.id%>?_method=DELETE"
+                        <form action="/campgrounds/<%= results[0].id %>/reviews/<%= rev.id%>?_method=DELETE"
                             method="POST">
                             <button class="btn btn-sm btn-danger">Delete</button>
                         </form>

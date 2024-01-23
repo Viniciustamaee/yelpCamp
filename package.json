@@ -3,6 +3,7 @@
         "start": "nodemon app.js"
     },
     "dependencies": {
+        "body-parser": "^1.20.2",
         "dotenv": "^16.3.1",
         "ejs": "^3.1.9",
         "ejs-mate": "^4.0.0",
