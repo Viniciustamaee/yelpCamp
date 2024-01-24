@@ -15,7 +15,7 @@ rount.post('/:id/reviews', (req, res) => {
             console.log("1 record inserted");
         });
     });
-    console.log(req.body, req.params)
+    req.flash('sucess', 'Cread a new review!!!')
     res.redirect(`/campgrounds/${id}`)
 });
 
@@ -27,6 +27,7 @@ rount.delete('/:id/reviews/:reviewId', (req, res) => {
             res.status(500).send('Erro interno no servidor');
             return;
         }
+        req.flash('sucess', 'Sucessfully delete the review!!')
         res.redirect(`/campgrounds/${id}`)
     });
 });

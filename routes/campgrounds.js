@@ -62,7 +62,10 @@ router.post('/', (req, res) => {
             console.error('Erro ao inserir produto no MySQL:', err);
             return res.status(500).send('Erro interno do servidor');
         }
-        res.redirect('/campgrounds');
+        const id = results.insertId;
+
+        req.flash('sucess', 'Sucessfully made a new campground')
+        res.redirect(`/campgrounds/${id}`);
     });
 });
 
@@ -72,13 +75,13 @@ router.delete('/:id', (req, res) => {
     con.query(`DELETE FROM reviews WHERE id_camp = ${id}`, (error, results, fields) => {
         if (error) {
             console.error(error);
-            res.status(500).send('Erro interno no servidor');
+            res.status(500).send('Erro interno no servidor REVIWS');
             return;
         }
         con.query(`DELETE FROM camp WHERE id = ${id}`, (error, results, fields) => {
             if (error) {
                 console.error(error);
-                res.status(500).send('Erro interno no servidor');
+                res.status(500).send('Erro interno no servidor CAMP');
                 return;
             }
             res.redirect('/campgrounds');
@@ -102,8 +105,8 @@ router.put('/:id', (req, res) => {
         if (error) {
             return res.status(500).json({ error: 'Erro ao atualizar o produto no banco de dados.' });
         }
-        console.log('Produto atualizado com sucesso:');
-        res.redirect('/campgrounds')
+        req.flash('sucess', 'Sucessfully updated campground')
+        res.redirect(`/campgrounds/${id}`)
     });
 });
 
