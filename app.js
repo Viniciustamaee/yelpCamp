@@ -6,9 +6,13 @@ const flash = require('connect-flash')
 const session = require('express-session');
 const port = 3000;
 const methodOverride = require('method-override');
+const passport = require('passport');
+const passLocal = require('passport-local')
+
 
 const campgrounds = require('./routes/campgrounds');
 const reviews = require('./routes/reviews');
+const users = require('./routes/user')
 
 app.set('view engine', 'ejs');
 app.engine('ejs', ejsMate)
@@ -19,10 +23,12 @@ app.use(methodOverride('_method'))
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'))
 
+
+
 const sessionConfig = {
     secret: 'secredo',
     resave: false,
-    saveUnitialized: true,
+    saveUninitialized: true,
     cookie: {
         httpOnly: true,
         expire: Date.now() + 1000 * 60 * 60 * 24 * 7,
@@ -32,7 +38,8 @@ const sessionConfig = {
 
 app.use(session(sessionConfig))
 app.use(flash())
-
+app.use(passport.initialize())
+app.use(passport.session())
 
 app.use((req, res, next) => {
     res.locals.sucess = req.flash('sucess')
@@ -42,6 +49,7 @@ app.use((req, res, next) => {
 
 app.use('/campgrounds', campgrounds);
 app.use('/campgrounds', reviews)
+app.use('/', users)
 
 
 
