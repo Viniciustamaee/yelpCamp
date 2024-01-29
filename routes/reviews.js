@@ -1,15 +1,16 @@
 const express = require('express')
 const rount = express.Router()
 const con = require('../database/db');
+const { isLoggin } = require('../middleware')
 
 
-
-
-rount.post('/:id/reviews', (req, res) => {
+rount.post('/:id/reviews', isLoggin, (req, res) => {
     const { rating, comment } = req.body;
+    const id_user = res.locals.user;
     const { id } = req.params
+
     con.connect(function (err) {
-        const sql = `INSERT INTO reviews (rating, comment, id_camp) VALUES ('${rating}', '${comment}', '${id}')`;
+        const sql = `INSERT INTO reviews (rating, comment, id_camp, id_user) VALUES ('${rating}', '${comment}', '${id}','${id_user}')`;
         con.query(sql, function (err, result) {
             if (err) throw err;
             console.log("1 record inserted");

@@ -1,7 +1,7 @@
 const express = require('express')
 const { campgroundSchema, reviewSchema } = require('../schemas')
 const con = require('../database/db');
-const {isLoggin} = require('../middleware')
+const { isLoggin } = require('../middleware')
 
 const router = express.Router();
 
@@ -17,13 +17,15 @@ router.get('/', (req, res) => {
     });
 });
 
-router.get('/new',isLoggin ,(req, res) => {
+router.get('/new', isLoggin, (req, res) => {
     res.render('campground/new')
 });
 
 
-router.get('/:id', (req, res) => {
+router.get('/:id', isLoggin, (req, res) => {
     const { id } = req.params;
+    const id_user = res.locals.user;
+
     con.query('SELECT * FROM camp WHERE id = ?', [id], function (err, results) {
         if (err) {
             throw err;
@@ -33,15 +35,14 @@ router.get('/:id', (req, res) => {
             sta = '404'
             res.render('err', { sta, err });
         } else {
-            con.query('SELECT * FROM reviews WHERE id_camp = ?', [id], function (err, resultsReviews) {
-                res.render('campground/show', { results, resultsReviews });
+            con.query('SELECT r.comment, r.rating, u.username FROM reviews AS r JOIN user AS u ON r.id_user = u.id WHERE r.id_camp = ?;', [id], function (err, resultsReviews) {
+                res.render('campground/show', { results, resultsReviews, id_user });
             })
-            
         }
     });
 });
 
-router.get('/:id/edit',isLoggin ,(req, res) => {
+router.get('/:id/edit', isLoggin, (req, res) => {
     const { id } = req.params;
     con.query(`SELECT * FROM camp WHERE id = ${id}`, function (err, results) {
         if (err) throw err;
@@ -49,27 +50,32 @@ router.get('/:id/edit',isLoggin ,(req, res) => {
     });
 });
 
-router.post('/', (req, res) => {
+router.post('/', isLoggin, (req, res) => {
     const { title, location, price, description, imgs } = req.body;
+    const id_user = res.locals.user;
     const { error, value } = campgroundSchema.validate({ title, location, price, description, imgs });
+
     if (error) {
-        const err = (error.details[0].message)
-        const sta = 400
+        const err = error.details[0].message;
+        const sta = 400;
         return res.status(400).render('err', { err, sta });
     }
-    const sql = 'INSERT INTO camp(title, location, price, description, imgs) VALUES (?, ?, ?, ?, ?)';
-    const values = [value.title, value.location, value.price, value.description, value.imgs];
+
+    const sql = 'INSERT INTO camp(title, location, price, description, imgs, id_user) VALUES (?, ?, ?, ?, ?, ?)';
+    const values = [value.title, value.location, value.price, value.description, value.imgs, id_user];
+
     con.query(sql, values, (err, results) => {
         if (err) {
             console.error('Erro ao inserir produto no MySQL:', err);
             return res.status(500).send('Erro interno do servidor');
         }
-        const id = results.insertId;
 
-        req.flash('sucess', 'Sucessfully made a new campground')
+        const id = results.insertId;
+        req.flash('sucess', 'Sucessfully made a new campground');
         res.redirect(`/campgrounds/${id}`);
     });
 });
+
 
 
 router.delete('/:id', isLoggin, (req, res) => {

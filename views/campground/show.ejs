@@ -19,12 +19,16 @@
                         $<%= results[0].price %>
                     </li>
                 </ul>
-                <div class="card-body">
-                    <form action="/campgrounds/<%= results[0].id%>?_method=DELETE" method="POST" class="d-inline">
-                        <button class="btn btn-danger">DELETE</button>
-                    </form>
-                    <a href="/campgrounds/<%= results[0].id %>/edit" class="btn btn-primary">Edit</a>
-                </div>
+
+                <% if (results[0].id_user==id_user ) {%>
+                    <div class="card-body">
+                        <form action="/campgrounds/<%= results[0].id%>?_method=DELETE" method="POST" class="d-inline">
+                            <button class="btn btn-danger">DELETE</button>
+                        </form>
+                        <a href="/campgrounds/<%= results[0].id %>/edit" class="btn btn-primary">Edit</a>
+                    </div>
+
+                    <% } %>
             </div>
         </div>
         <div class="col-6">
@@ -51,12 +55,17 @@
                 <div class="card mb-3">
                     <div class="card-body">
                         <h5 class="card-title">
-                            <b>Rating:</b>
-                            <%= rev.rating %>
+                            <b>Usarname:</b>
+                            <%= rev.username %>
+                                <b>Rating:</b>
+                                <%= rev.rating %>
                         </h5>
                         <p class="card-text">
                             <b>Comment:</b>
                             <%= rev.comment %>
+                        </p>
+                        <p class="card-text">
+
                         </p>
                         <form action="/campgrounds/<%= results[0].id %>/reviews/<%= rev.id%>?_method=DELETE"
                             method="POST">
