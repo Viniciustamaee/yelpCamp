@@ -42,6 +42,7 @@ app.use(passport.initialize())
 app.use(passport.session())
 
 app.use((req, res, next) => {
+    res.locals.loggin = req.user;
     res.locals.sucess = req.flash('sucess')
     res.locals.error = req.flash('error')
     next();

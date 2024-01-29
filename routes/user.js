@@ -4,6 +4,7 @@ const con = require('../database/db');
 const bcrypt = require('bcrypt');
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy;
+const salts = 10
 
 
 router.get('/register', (req, res) => {
@@ -13,7 +14,7 @@ router.get('/register', (req, res) => {
 router.post('/register', async (req, res) => {
     const { email, username, password } = req.body;
     try {
-        const passwordHash = await bcrypt.hash(password, 10);
+        const passwordHash = await bcrypt.hash(password, salts);
         const sql = `INSERT INTO user (email, username, password) VALUES ('${email}', '${username}', '${passwordHash}')`;
         const result = await new Promise((resolve, reject) => {
             con.query(sql, function (err, result) {
@@ -21,8 +22,8 @@ router.post('/register', async (req, res) => {
                 resolve(result);
             });
         });
-        req.flash('sucess', 'Welcome to Yelp Camp!!')
-        res.redirect('/campgrounds');
+        req.flash('sucess', 'Register complete')
+        res.redirect('/login');
     } catch (error) {
         const errorMessage = error.message;
         req.flash('error', errorMessage);
@@ -34,10 +35,59 @@ router.get('/login', (req, res) => {
     res.render('users/login')
 });
 
-router.post('/login', passport.authenticate('local', { failureFlash: true, failureRedirect: '/login', successRedirect: "/campgrounds" }), (req, res) => {
-    req.flash('success', 'deu certo')
-    res.redirect('/campgrounds')
+passport.serializeUser(function(user, done) {
+    done(null, user);
+  });
+  passport.deserializeUser(function(user, done) {
+    done(null, user);
+  });
+
+
+  passport.use(new LocalStrategy(async function(username, password, done) {
+    try {
+        const rows = await new Promise((resolve, reject) => {
+            con.query('SELECT * FROM user WHERE username=?', [username], function(err, rows) {
+                if (err) reject(err);
+                resolve(rows);
+            });
+        });
+
+        if (rows.length === 0) {
+            return done(null, false, { message: 'Usuário não encontrado.' });
+        }
+
+        const user = rows[0];
+
+        const passwordMatch = await bcrypt.compare(password, user.password);
+
+        if (passwordMatch) {
+            return done(null, user.id);
+        } else {
+            return done(null, false, { message: 'Senha incorreta.' });
+        }
+    } catch (error) {
+        return done(error);
+    }
+}));
+
+router.post('/login', passport.authenticate('local', {
+    failureFlash: true,
+    failureRedirect: '/login'
+}), (req, res) => {
+    req.flash('sucess', 'Wellcome to yelpCamp')
+    res.redirect('/campgrounds');
 });
+
+router.get('/logout', (req, res) => {
+    req.logout(function(err) {
+        if (err) {
+            console.error(err);
+        }
+        req.flash('sucess', 'Goodbye!!!');
+        res.redirect('/campgrounds');
+    });
+});
+
 
 module.exports = router
 

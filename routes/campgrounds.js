@@ -1,6 +1,7 @@
 const express = require('express')
 const { campgroundSchema, reviewSchema } = require('../schemas')
 const con = require('../database/db');
+const {isLoggin} = require('../middleware')
 
 const router = express.Router();
 
@@ -16,7 +17,7 @@ router.get('/', (req, res) => {
     });
 });
 
-router.get('/new', (req, res) => {
+router.get('/new',isLoggin ,(req, res) => {
     res.render('campground/new')
 });
 
@@ -35,11 +36,12 @@ router.get('/:id', (req, res) => {
             con.query('SELECT * FROM reviews WHERE id_camp = ?', [id], function (err, resultsReviews) {
                 res.render('campground/show', { results, resultsReviews });
             })
+            
         }
     });
 });
 
-router.get('/:id/edit', (req, res) => {
+router.get('/:id/edit',isLoggin ,(req, res) => {
     const { id } = req.params;
     con.query(`SELECT * FROM camp WHERE id = ${id}`, function (err, results) {
         if (err) throw err;
@@ -70,7 +72,7 @@ router.post('/', (req, res) => {
 });
 
 
-router.delete('/:id', (req, res) => {
+router.delete('/:id', isLoggin, (req, res) => {
     const { id } = req.params;
     con.query(`DELETE FROM reviews WHERE id_camp = ${id}`, (error, results, fields) => {
         if (error) {
