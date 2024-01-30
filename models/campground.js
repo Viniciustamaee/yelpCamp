@@ -7,7 +7,7 @@ con.connect(function () {
         if (err) {
             console.error('Error creating table:', err);
         } else {
-            console.log("Table camp");
+            console.log("Table camp created");
         }
     })
 });

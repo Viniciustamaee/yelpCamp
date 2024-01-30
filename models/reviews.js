@@ -6,7 +6,7 @@ con.connect(function () {
         if (err) {
             console.error('Error creating table:', err);
         } else {
-            console.log("Table Reviews");
+            console.log("Table reviews created");
         }
     })
 });

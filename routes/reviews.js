@@ -1,6 +1,5 @@
 const express = require('express')
 const rount = express.Router()
-const con = require('../database/db');
 const { isLoggin } = require('../middleware')
 const reviewsControll = require('../controllers/reviews')
 
