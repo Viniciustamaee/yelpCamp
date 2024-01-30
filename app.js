@@ -7,7 +7,6 @@ const session = require('express-session');
 const port = 3000;
 const methodOverride = require('method-override');
 const passport = require('passport');
-const passLocal = require('passport-local')
 
 
 const campgrounds = require('./routes/campgrounds');

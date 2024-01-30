@@ -35,7 +35,7 @@ router.get('/:id', isLoggin, (req, res) => {
             sta = '404'
             res.render('err', { sta, err });
         } else {
-            con.query('SELECT r.comment, r.rating, u.username FROM reviews AS r JOIN user AS u ON r.id_user = u.id WHERE r.id_camp = ?;', [id], function (err, resultsReviews) {
+            con.query('SELECT r.*, u.username, u.id as id_user FROM reviews AS r JOIN user AS u ON r.id_user = u.id WHERE r.id_camp = ?;', [id], function (err, resultsReviews) {
                 res.render('campground/show', { results, resultsReviews, id_user });
             })
         }
