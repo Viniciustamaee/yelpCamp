@@ -5,7 +5,7 @@
         </h1>
         <div class="col-6 offset-3">
             <form action="/campgrounds/<%= results[0].id %>?_method=PUT " method="POST" novalidate
-                class="validated-form">
+                class="validated-form" enctype="multipart/form-data">
                 <div class="mb-3">
                     <label for="title" class="form-label">Title</label>
                     <input type="text" id="title" name="title" class="form-control" value="<%= results[0].title %>"
@@ -19,9 +19,8 @@
                 </div>
 
                 <div class="mb-3">
-                    <label for="imgs" class="form-label">Img url</label>
-                    <input type="text" id="imgs" name="imgs" class="form-control " value="<%=results[0].imgs %>"
-                        required>
+                    <label for="formFile" class="form-label">Choose the img</label>
+                    <input class="form-control" type="file" id="formFile" name="imgs">
                 </div>
 
 

@@ -44,7 +44,9 @@ module.exports.edit = (req, res) => {
 }
 
 module.exports.insert = (req, res) => {
-    const { title, location, price, description, imgs } = req.body;
+    const imgs = req.file.path
+    console.log(req.file)
+    const { title, location, price, description } = req.body;
     const id_user = res.locals.user;
     const { error, value } = campgroundSchema.validate({ title, location, price, description, imgs });
 
@@ -60,6 +62,7 @@ module.exports.insert = (req, res) => {
         } else {
             req.flash('sucess', 'Sucessfully made a new campground');
             res.redirect(`/campgrounds/${id}`);
+            console.log(req.body, req.file)
         }
     });
 }
@@ -78,8 +81,10 @@ module.exports.delete = (req, res) => {
 }
 
 module.exports.updateCamp = (req, res) => {
+    const imgs = req.file.path
+    console.log(imgs)
     const { id } = req.params;
-    const { title, location, price, description, imgs } = req.body;
+    const { title, location, price, description } = req.body;
     const { error: infoError, value: validatedInfo } = campgroundSchema.validate({ title, location, price, description, imgs });
     if (infoError) {
         const err = infoError.details[0].message;
